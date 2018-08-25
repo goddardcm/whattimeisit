@@ -27,7 +27,7 @@ func (RequestHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	twimlResponse := TwiML{
-		Say: fmt.Sprintf("The current time is %d %d %s on %s %s %d %d",
+		Say: fmt.Sprintf("The current time is %d, %02d, %s, on %s, %s, %d, %d",
 			hour,
 			now.Minute(),
 			meridiem,
