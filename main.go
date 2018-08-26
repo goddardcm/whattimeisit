@@ -27,26 +27,33 @@ func (RequestHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	twimlResponse := TwiML{
-		Say: fmt.Sprintf("The current time is %d, %02d, %s, on %s, %s, %d, %d",
-			hour,
-			now.Minute(),
-			meridiem,
-			now.Weekday().String(),
-			now.Month().String(),
-			now.Day(),
-			now.Year(),
-		),
+		Say: Say{
+			Loop: 5,
+			Content: fmt.Sprintf("The current time is %d, %02d, %s, on %s, %s, %d, %d",
+				hour,
+				now.Minute(),
+				meridiem,
+				now.Weekday().String(),
+				now.Month().String(),
+				now.Day(),
+				now.Year(),
+			),
+		},
 	}
 	bytes, _ := xml.Marshal(twimlResponse)
 
 	w.Header().Set("Content-Type", "application/xml")
 	w.Write(bytes)
-
 }
 
 type TwiML struct {
 	XMLName xml.Name `xml:"Response"`
 
-	Say  string `xml:",omitempty"`
+	Say  Say    `xml:",omitempty"`
 	Play string `xml:",omitempty"`
+}
+
+type Say struct {
+	Loop    int64  `xml:"loop,attr"`
+	Content string `xml:",chardata"`
 }
